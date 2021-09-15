@@ -1,0 +1,39 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-size: calc(0.5vh + 0.5vw);
+  font-family: 'Roboto';
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+.app {
+  @extend #root;
+
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2vh 5vw;
+  box-sizing: border-box;
+}
+.pagecounter {
+  margin-top: 1vh;
+  display: flex;
+  & div ~ div {
+    margin-left: 1vw;
+  }
+}
+.info {
+  margin-top: 0.5vh;
+  display: flex;
+  flex-direction: column;
+}
+.searchpanel {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

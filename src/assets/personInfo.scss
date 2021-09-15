@@ -1,0 +1,25 @@
+.personInfo {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  & div {
+    padding: 0.5vh 1vw;
+    border: 1px solid black;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  &_id {
+    width: 5vw;
+  }
+  &_name {
+    width: 10vw;
+  }
+  &_contact {
+    width: 15vw;
+  }
+  &_state {
+    width: 5vw;
+  }
+}

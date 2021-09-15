@@ -1,0 +1,4 @@
+# Ignore artifacts:
+build
+demo
+node_modules

@@ -1,0 +1,15 @@
+.page-selector {
+  width: 1.5vw;
+  height: 1.5vw;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s;
+  cursor: pointer;
+  &-active {
+    @extend .page-selector;
+    border-radius: 50%;
+    text-decoration: underline;
+  }
+}
