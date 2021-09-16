@@ -1,6 +1,0 @@
-.page-selector,.page-selector-active{width:1.5vw;height:1.5vw;border:1px solid #000;display:flex;justify-content:center;align-items:center;transition:all .5s;cursor:pointer}.page-selector-active{border-radius:50%;text-decoration:underline}
-.personInfo{display:flex;flex-direction:row;cursor:pointer}.personInfo div{padding:.5vh 1vw;border:1px solid #000;box-sizing:border-box;display:flex;flex-wrap:wrap;justify-content:center}.personInfo_id{width:5vw}.personInfo_name{width:10vw}.personInfo_contact{width:15vw}.personInfo_state{width:5vw}
-.profile-info{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;margin-top:5vh;border:1px solid #000;cursor:pointer}.profile-info *{font-size:1.2em;transition:all .5s}.profile-info *~*{margin-top:.5vh}
-*{padding:0;margin:0;font-size:calc(0.5vh + 0.5vw);font-family:"Roboto"}#root,.app{width:100vw;height:100vh}.app{overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:2vh 5vw;box-sizing:border-box}.pagecounter{margin-top:1vh;display:flex}.pagecounter div~div{margin-left:1vw}.info{margin-top:.5vh;display:flex;flex-direction:column}.searchpanel{width:100%;display:flex;flex-direction:row;justify-content:space-between}
-
-/*# sourceMappingURL=main.c345f1f07ba0202e8135.css.map*/
