@@ -7,6 +7,7 @@ export interface StateInt {
   activeDescription?: PersonInt;
   activeStateFilter: string;
   states: string[];
+  searchValue: string;
 }
 
 export interface PersonInt {

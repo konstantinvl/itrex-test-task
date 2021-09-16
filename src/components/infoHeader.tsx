@@ -3,7 +3,7 @@ import { sortInfo } from '../redux/actions';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import { EMAIL, FIRST_NAME, ID, LAST_NAME, PHONE } from './constants';
 
-export const InfoHeader: FC<{}> = () => {
+export const InfoHeader: FC = () => {
   const { sort } = useAppSelector((state) => state.info);
   const dispatch = useAppDispatch();
 

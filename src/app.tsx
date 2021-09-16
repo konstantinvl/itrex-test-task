@@ -5,30 +5,17 @@ import { useAppDispatch, useAppSelector } from './redux/store';
 import { getInfo, getStateFilteredInfo } from './redux/toolkit-reduser';
 import { Page } from './components/pageselector';
 import { PersonInfo } from './components/personInfo';
-import { setActivepage, setStateFilter } from './redux/actions';
+import { setActivepage, setSearchValue } from './redux/actions';
 import { ProfileInfo } from './components/profileInfo';
 import { InfoHeader } from './components/infoHeader';
 
 export function App(): JSX.Element {
-  const { totalPages, activeInfo, activePage, states, activeStateFilter } =
+  const { totalPages, activeInfo, activePage, states, activeStateFilter, searchValue } =
     useAppSelector((state) => state.info);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getInfo());
   }, []);
-
-  // function setStateOptions() {
-  //   const options: string[] = ['None'];
-  //   info.forEach((profile) => {
-  //     if (!options.includes(profile.adress.state)) {
-  //       options.push(profile.adress.state);
-  //     }
-  //   });
-  //   const rez = options.map((str) => {
-  //     return <option value={str}>{str}</option>;
-  //   });
-  //   return rez;
-  // }
 
   function setPageSelector() {
     const selectors: JSX.Element[] = [];
@@ -43,7 +30,13 @@ export function App(): JSX.Element {
       <div className="searchpanel">
         <div>
           <label htmlFor="search">Search: </label>
-          <input type="text" />
+          <input
+            type="text"
+            value={searchValue}
+            onChange={(e) => {
+              dispatch(setSearchValue(e.target.value));
+            }}
+          />
         </div>
         <div>
           <label htmlFor="state">Filter by state: </label>
@@ -52,9 +45,11 @@ export function App(): JSX.Element {
             id="state-select"
             value={activeStateFilter}
             onChange={(e) => {
-              e.target.value === 'None'
-                ? dispatch(getInfo())
-                : dispatch(getStateFilteredInfo(e.target.value));
+              if (e.target.value === 'None') {
+                dispatch(getInfo());
+              } else {
+                dispatch(getStateFilteredInfo(e.target.value));
+              }
             }}
           >
             {states.map((state) => {

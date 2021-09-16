@@ -1,5 +1,5 @@
-import React from 'react';
-import { FC } from 'react';
+import React, { FC } from 'react';
+
 import { setActivepage } from '../redux/actions';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import '../assets/pageSelector.scss';

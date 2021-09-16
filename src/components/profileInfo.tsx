@@ -1,10 +1,9 @@
-import React from 'react';
-import { FC } from 'react';
-import { useAppDispatch, useAppSelector } from '../redux/store';
-import '../assets/profileInfo.scss';
+import React, { FC } from 'react';
 import { LoremIpsum } from 'lorem-ipsum';
+import { useAppSelector } from '../redux/store';
+import '../assets/profileInfo.scss';
 
-export const ProfileInfo: FC<{}> = () => {
+export const ProfileInfo: FC = () => {
   const { activeDescription } = useAppSelector((state) => state.info);
   const lorem = new LoremIpsum();
   return (
@@ -15,7 +14,7 @@ export const ProfileInfo: FC<{}> = () => {
       <h5>Profile Info:</h5>
       <span>
         Selected Profile:{' '}
-        {activeDescription?.firstName + ' ' + activeDescription?.lastName}
+        {`${activeDescription?.firstName} ${activeDescription?.lastName}`}
       </span>
       <span>
         Description: <span style={{ fontSize: '0.9em' }}>{lorem.generateWords(32)}</span>

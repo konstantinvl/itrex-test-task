@@ -1,10 +1,7 @@
-import { Action, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { EMAIL, FIRST_NAME, ID, LAST_NAME, PHONE } from '../components/constants';
 import { PersonInt, SortInt, StateInt } from '../interfaces/stateInt';
 import axiosInstance from '../services/api';
-import { setActiveInfo, setActivepage } from './actions';
-
-import type { RootState } from './store';
 
 const onPage = 20;
 
@@ -15,30 +12,30 @@ export const initialState: StateInt = {
   sort: { name: '', order: 1 },
   activeStateFilter: 'None',
   states: [],
+  searchValue: '',
 };
 
-export const getInfo = createAsyncThunk('info/setInfo', async (_id, thunkAPI): Promise<
+export const getInfo = createAsyncThunk('info/setInfo', async (): Promise<
   PersonInt[]
 > => {
   const response = await axiosInstance('react-test-api.json');
   const info: PersonInt[] = response.data;
-  thunkAPI.dispatch(setActiveInfo());
+
   return info;
 });
 
 export const getStateFilteredInfo = createAsyncThunk(
   'info/setStateFilteredInfo',
   async (
-    activeStateFilter: string,
-    thunkAPI
+    activeStateFilter: string
   ): Promise<{ info: PersonInt[]; activeStateFilter: string }> => {
     const response = await axiosInstance('react-test-api.json');
     const info: PersonInt[] = response.data;
-    thunkAPI.dispatch(setActiveInfo());
+
     const filteredInfo = info.filter(
       (profile) => profile.adress.state === activeStateFilter
     );
-    return { info: filteredInfo, activeStateFilter: activeStateFilter };
+    return { info: filteredInfo, activeStateFilter };
   }
 );
 
@@ -47,12 +44,13 @@ export const infoSlice = createSlice({
   initialState,
   reducers: {
     setSort: (state, action: PayloadAction<string>) => {
-      const { info, activePage } = state;
-      let { name, order } = <SortInt>state.sort;
+      const { info, activePage, searchValue } = state;
+      const { name } = <SortInt>state.sort;
+      let { order } = <SortInt>state.sort;
       switch (action.payload) {
         case ID: {
           if (name === ID) {
-            order = -1 * order;
+            order = -order;
           }
           info.sort((profileA, profileB) => {
             if (profileA.id > profileB.id) {
@@ -67,7 +65,7 @@ export const infoSlice = createSlice({
         }
         case FIRST_NAME: {
           if (name === FIRST_NAME) {
-            order = -1 * order;
+            order = -order;
           }
           info.sort((profileA, profileB) => {
             if (profileA.firstName > profileB.firstName) {
@@ -82,7 +80,7 @@ export const infoSlice = createSlice({
         }
         case LAST_NAME: {
           if (name === LAST_NAME) {
-            order = -1 * order;
+            order = -order;
           }
           info.sort((profileA, profileB) => {
             if (profileA.lastName > profileB.lastName) {
@@ -97,7 +95,7 @@ export const infoSlice = createSlice({
         }
         case EMAIL: {
           if (name === EMAIL) {
-            order = -1 * order;
+            order = -order;
           }
           info.sort((profileA, profileB) => {
             if (profileA.email > profileB.email) {
@@ -112,7 +110,7 @@ export const infoSlice = createSlice({
         }
         case PHONE: {
           if (name === PHONE) {
-            order = -1 * order;
+            order = -order;
           }
           info.sort((profileA, profileB) => {
             if (profileA.phone > profileB.phone) {
@@ -125,33 +123,54 @@ export const infoSlice = createSlice({
           });
           break;
         }
+        default:
+          break;
       }
 
-      const activeInfo: PersonInt[] = info.filter(
-        (item, id) => id >= (activePage - 1) * 20 && id <= activePage * 20 - 1
-      );
+      const activeInfo: PersonInt[] = info
+        .filter((item) => {
+          const containCheck =
+            item.id.toString().includes(searchValue.toLowerCase()) ||
+            item.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.lastName.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.phone.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.adress.state.toLowerCase().includes(searchValue.toLowerCase());
+          if (containCheck) {
+            return item;
+          }
+          return false;
+        })
+        .filter((_item, id) => id >= (activePage - 1) * 20 && id <= activePage * 20 - 1);
       state.info = info;
       state.activeInfo = activeInfo;
-      state.sort = { name: action.payload, order: order };
+      state.sort = { name: action.payload, order };
     },
 
     setActiveDescription: (state, action: PayloadAction<PersonInt>) => {
       return { ...state, activeDescription: action.payload };
     },
     setActivePage: (state, action: PayloadAction<number>) => {
-      const { info } = state;
-      const activeInfo: PersonInt[] = info.filter(
-        (item, id) => id >= (action.payload - 1) * 20 && id <= action.payload * 20 - 1
-      );
-      console.log(activeInfo);
-      return { ...state, activePage: action.payload, activeInfo: activeInfo };
-    },
-    setActiveInfo: (state, action: Action) => {
-      const { info, activePage } = state;
-      const activeInfo: PersonInt[] = info.filter(
-        (item, id) => id >= (activePage - 1) * 20 && id <= activePage * 20 - 1
-      );
-      return { ...state, activeInfo: activeInfo };
+      const { info, searchValue } = state;
+
+      const activeInfo: PersonInt[] = info
+        .filter((item) => {
+          const containCheck =
+            item.id.toString().includes(searchValue.toLowerCase()) ||
+            item.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.lastName.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.phone.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.adress.state.toLowerCase().includes(searchValue.toLowerCase());
+          if (containCheck) {
+            return item;
+          }
+          return false;
+        })
+        .filter(
+          (_item, id) => id >= (action.payload - 1) * 20 && id <= action.payload * 20 - 1
+        );
+      return { ...state, activePage: action.payload, activeInfo };
     },
     setStateFilter: (state, action: PayloadAction<string>) => {
       state.info = state.info.filter(
@@ -159,6 +178,30 @@ export const infoSlice = createSlice({
       );
       state.activeInfo = state.info.filter((item, id) => id >= 0 && id <= onPage - 1);
       state.activeStateFilter = action.payload;
+    },
+    setSearchValue: (state, action: PayloadAction<string>) => {
+      const { info } = state;
+      const activeInfo: PersonInt[] = info
+        .filter((item) => {
+          const containCheck =
+            item.id.toString().includes(action.payload.toLowerCase()) ||
+            item.firstName.toLowerCase().includes(action.payload.toLowerCase()) ||
+            item.lastName.toLowerCase().includes(action.payload.toLowerCase()) ||
+            item.email.toLowerCase().includes(action.payload.toLowerCase()) ||
+            item.phone.toLowerCase().includes(action.payload.toLowerCase()) ||
+            item.adress.state.toLowerCase().includes(action.payload.toLowerCase());
+          if (containCheck) {
+            return item;
+          }
+          return false;
+        })
+        .filter((_item, id) => id >= 0 && id <= onPage - 1);
+      return {
+        ...state,
+        searchValue: action.payload,
+        activePage: 1,
+        activeInfo,
+      };
     },
   },
   extraReducers: (builder) => {
@@ -177,9 +220,9 @@ export const infoSlice = createSlice({
         return {
           ...state,
           info: action.payload,
-          totalPages: totalPages,
-          activeInfo: activeInfo,
-          states: states,
+          totalPages,
+          activeInfo,
+          states,
         };
       }
       return { ...state, info: [] };
@@ -194,10 +237,11 @@ export const infoSlice = createSlice({
         return {
           ...state,
           info: action.payload.info,
-          totalPages: totalPages,
-          activeInfo: activeInfo,
+          totalPages,
+          activeInfo,
           activePage: 1,
           activeStateFilter: action.payload.activeStateFilter,
+          searchValue: '',
         };
       }
       return { ...state, info: [] };
