@@ -22,7 +22,7 @@
 .pagecounter {
   margin-top: 1vh;
   display: flex;
-  & div ~ div {
+  & * ~ * {
     margin-left: 1vw;
   }
 }

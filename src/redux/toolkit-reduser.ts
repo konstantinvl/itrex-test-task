@@ -1,9 +1,16 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { EMAIL, FIRST_NAME, ID, LAST_NAME, PHONE } from '../components/constants';
+import {
+  EMAIL,
+  FIRST_NAME,
+  ID,
+  LAST_NAME,
+  onPage,
+  PHONE,
+  STATE,
+} from '../components/constants';
 import { PersonInt, SortInt, StateInt } from '../interfaces/stateInt';
 import axiosInstance from '../services/api';
-
-const onPage = 20;
+import { filterInfo } from '../services/functions';
 
 export const initialState: StateInt = {
   info: [],
@@ -13,6 +20,7 @@ export const initialState: StateInt = {
   activeStateFilter: 'None',
   states: [],
   searchValue: '',
+  activeInfo: [],
 };
 
 export const getInfo = createAsyncThunk('info/setInfo', async (): Promise<
@@ -24,27 +32,12 @@ export const getInfo = createAsyncThunk('info/setInfo', async (): Promise<
   return info;
 });
 
-export const getStateFilteredInfo = createAsyncThunk(
-  'info/setStateFilteredInfo',
-  async (
-    activeStateFilter: string
-  ): Promise<{ info: PersonInt[]; activeStateFilter: string }> => {
-    const response = await axiosInstance('react-test-api.json');
-    const info: PersonInt[] = response.data;
-
-    const filteredInfo = info.filter(
-      (profile) => profile.adress.state === activeStateFilter
-    );
-    return { info: filteredInfo, activeStateFilter };
-  }
-);
-
 export const infoSlice = createSlice({
   name: 'info',
   initialState,
   reducers: {
     setSort: (state, action: PayloadAction<string>) => {
-      const { info, activePage, searchValue } = state;
+      const { info, activePage, searchValue, activeStateFilter } = state;
       const { name } = <SortInt>state.sort;
       let { order } = <SortInt>state.sort;
       switch (action.payload) {
@@ -123,25 +116,30 @@ export const infoSlice = createSlice({
           });
           break;
         }
+        case STATE: {
+          if (name === STATE) {
+            order = -order;
+          }
+          info.sort((profileA, profileB) => {
+            if (profileA.adress.state > profileB.adress.state) {
+              return 1 * order;
+            }
+            if (profileA.adress.state < profileB.adress.state) {
+              return -1 * order;
+            }
+            return 0;
+          });
+          break;
+        }
         default:
           break;
       }
 
-      const activeInfo: PersonInt[] = info
-        .filter((item) => {
-          const containCheck =
-            item.id.toString().includes(searchValue.toLowerCase()) ||
-            item.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.lastName.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.phone.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.adress.state.toLowerCase().includes(searchValue.toLowerCase());
-          if (containCheck) {
-            return item;
-          }
-          return false;
-        })
-        .filter((_item, id) => id >= (activePage - 1) * 20 && id <= activePage * 20 - 1);
+      const filteredInfo = filterInfo(info, searchValue, activeStateFilter);
+
+      const activeInfo = filteredInfo.filter(
+        (_item, id) => id >= (activePage - 1) * onPage && id <= activePage * onPage - 1
+      );
       state.info = info;
       state.activeInfo = activeInfo;
       state.sort = { name: action.payload, order };
@@ -151,56 +149,40 @@ export const infoSlice = createSlice({
       return { ...state, activeDescription: action.payload };
     },
     setActivePage: (state, action: PayloadAction<number>) => {
-      const { info, searchValue } = state;
+      const { info, searchValue, activeStateFilter } = state;
 
-      const activeInfo: PersonInt[] = info
-        .filter((item) => {
-          const containCheck =
-            item.id.toString().includes(searchValue.toLowerCase()) ||
-            item.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.lastName.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.phone.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.adress.state.toLowerCase().includes(searchValue.toLowerCase());
-          if (containCheck) {
-            return item;
-          }
-          return false;
-        })
-        .filter(
-          (_item, id) => id >= (action.payload - 1) * 20 && id <= action.payload * 20 - 1
-        );
+      const filteredInfo = filterInfo(info, searchValue, activeStateFilter);
+
+      const activeInfo = filteredInfo.filter(
+        (_item, id) =>
+          id >= (action.payload - 1) * onPage && id <= action.payload * onPage - 1
+      );
       return { ...state, activePage: action.payload, activeInfo };
     },
     setStateFilter: (state, action: PayloadAction<string>) => {
-      state.info = state.info.filter(
-        (profile) => profile.adress.state === action.payload
-      );
-      state.activeInfo = state.info.filter((item, id) => id >= 0 && id <= onPage - 1);
-      state.activeStateFilter = action.payload;
-    },
-    setSearchValue: (state, action: PayloadAction<string>) => {
-      const { info } = state;
-      const activeInfo: PersonInt[] = info
-        .filter((item) => {
-          const containCheck =
-            item.id.toString().includes(action.payload.toLowerCase()) ||
-            item.firstName.toLowerCase().includes(action.payload.toLowerCase()) ||
-            item.lastName.toLowerCase().includes(action.payload.toLowerCase()) ||
-            item.email.toLowerCase().includes(action.payload.toLowerCase()) ||
-            item.phone.toLowerCase().includes(action.payload.toLowerCase()) ||
-            item.adress.state.toLowerCase().includes(action.payload.toLowerCase());
-          if (containCheck) {
-            return item;
-          }
-          return false;
-        })
-        .filter((_item, id) => id >= 0 && id <= onPage - 1);
+      const { info, searchValue } = state;
+      const filteredInfo = filterInfo(info, searchValue, action.payload);
+      const totalPages = Math.ceil(Number(filteredInfo.length) / onPage);
+      const activeInfo = filteredInfo.filter((_item, id) => id >= 0 && id <= onPage - 1);
       return {
         ...state,
-        searchValue: action.payload,
+        totalPages,
+        activeStateFilter: action.payload,
         activePage: 1,
         activeInfo,
+      };
+    },
+    setSearchValue: (state, action: PayloadAction<string>) => {
+      const { info, activeStateFilter } = state;
+      const filteredInfo = filterInfo(info, action.payload, activeStateFilter);
+      const totalPages = Math.ceil(Number(filteredInfo.length) / onPage);
+      const activeInfo = filteredInfo.filter((_item, id) => id >= 0 && id <= onPage - 1);
+      return {
+        ...state,
+        totalPages,
+        searchValue: action.payload,
+        activePage: 1,
+        activeInfo: activeInfo,
       };
     },
   },
@@ -209,7 +191,7 @@ export const infoSlice = createSlice({
       if (action.payload) {
         const totalPages = Math.ceil(Number(action.payload.length) / onPage);
         const activeInfo: PersonInt[] = action.payload.filter(
-          (item, id) => id >= 0 && id <= onPage - 1
+          (_item, id) => id >= 0 && id <= onPage - 1
         );
         const states: string[] = ['None'];
         action.payload.forEach((profile) => {
@@ -223,25 +205,6 @@ export const infoSlice = createSlice({
           totalPages,
           activeInfo,
           states,
-        };
-      }
-      return { ...state, info: [] };
-    });
-    builder.addCase(getStateFilteredInfo.fulfilled, (state, action): StateInt => {
-      if (action.payload) {
-        const totalPages = Math.ceil(Number(action.payload.info.length) / onPage);
-        const activeInfo: PersonInt[] = action.payload.info.filter(
-          (item, id) => id >= 0 && id <= onPage - 1
-        );
-
-        return {
-          ...state,
-          info: action.payload.info,
-          totalPages,
-          activeInfo,
-          activePage: 1,
-          activeStateFilter: action.payload.activeStateFilter,
-          searchValue: '',
         };
       }
       return { ...state, info: [] };

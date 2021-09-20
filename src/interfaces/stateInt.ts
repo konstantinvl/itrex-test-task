@@ -3,7 +3,7 @@ export interface StateInt {
   activePage: number;
   totalPages: number;
   sort: SortInt;
-  activeInfo?: PersonInt[];
+  activeInfo: PersonInt[];
   activeDescription?: PersonInt;
   activeStateFilter: string;
   states: string[];

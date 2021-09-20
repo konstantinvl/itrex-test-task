@@ -9,7 +9,10 @@ export const PersonInfo: FC<{
 }> = ({ person }) => {
   const dispatch = useAppDispatch();
   return (
-    <div className="personInfo" onClick={() => dispatch(setActiveDecription(person))}>
+    <div
+      className="personInfo profile-table"
+      onClick={() => dispatch(setActiveDecription(person))}
+    >
       <div className="personInfo_id">{person.id}</div>
       <div className="personInfo_name">{person.firstName}</div>
       <div className="personInfo_name">{person.lastName}</div>

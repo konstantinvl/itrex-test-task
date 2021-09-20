@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { sortInfo } from '../redux/actions';
 import { useAppDispatch, useAppSelector } from '../redux/store';
-import { EMAIL, FIRST_NAME, ID, LAST_NAME, PHONE } from './constants';
+import { EMAIL, FIRST_NAME, ID, LAST_NAME, PHONE, STATE } from './constants';
 
 export const InfoHeader: FC = () => {
   const { sort } = useAppSelector((state) => state.info);
@@ -94,7 +94,23 @@ export const InfoHeader: FC = () => {
           ᐅ
         </span>
       </div>
-      <div className="personInfo_state">State</div>
+      <div
+        className="personInfo_state"
+        onClick={() => {
+          dispatch(sortInfo(STATE));
+        }}
+      >
+        State{' '}
+        <span
+          style={
+            sort.name === STATE
+              ? { visibility: 'visible', transform: `rotate(${90 * -1 * sort.order}deg)` }
+              : { visibility: 'collapse' }
+          }
+        >
+          ᐅ
+        </span>
+      </div>
     </div>
   );
 };

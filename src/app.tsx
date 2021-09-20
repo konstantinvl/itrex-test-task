@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from './redux/store';
-
-import { getInfo, getStateFilteredInfo } from './redux/toolkit-reduser';
+// getStateFilteredInfo
+import { getInfo } from './redux/toolkit-reduser';
 import { Page } from './components/pageselector';
 import { PersonInfo } from './components/personInfo';
-import { setActivepage, setSearchValue } from './redux/actions';
+import { setActivepage, setSearchValue, setStateFilter } from './redux/actions';
 import { ProfileInfo } from './components/profileInfo';
 import { InfoHeader } from './components/infoHeader';
 
@@ -45,11 +45,7 @@ export function App(): JSX.Element {
             id="state-select"
             value={activeStateFilter}
             onChange={(e) => {
-              if (e.target.value === 'None') {
-                dispatch(getInfo());
-              } else {
-                dispatch(getStateFilteredInfo(e.target.value));
-              }
+              dispatch(setStateFilter(e.target.value));
             }}
           >
             {states.map((state) => {
@@ -64,34 +60,44 @@ export function App(): JSX.Element {
       </div>
       <div className="info">
         <InfoHeader />
-        {activeInfo?.map((person) => {
-          return <PersonInfo person={person} key={person.id + person.firstName} />;
-        })}
+        {activeInfo?.length > 0 ? (
+          activeInfo?.map((person) => {
+            return <PersonInfo person={person} key={person.id + person.firstName} />;
+          })
+        ) : (
+          <div style={{ width: '100%', textAlign: 'center' }}>No information found</div>
+        )}
       </div>
       <div className="pagecounter">
-        <div
+        <button
           className="page-selector"
-          style={{ width: '2vw' }}
+          style={
+            totalPages > 0
+              ? { width: '2vw', visibility: 'visible' }
+              : { width: '2vw', visibility: 'hidden' }
+          }
+          disabled={activePage === 1}
           onClick={() => {
-            if (activePage !== 1) {
-              dispatch(setActivepage(activePage - 1));
-            }
+            dispatch(setActivepage(activePage - 1));
           }}
         >
           Prev
-        </div>
+        </button>
         {setPageSelector()}
-        <div
+        <button
           className="page-selector"
-          style={{ width: '2vw' }}
+          style={
+            totalPages > 0
+              ? { width: '2vw', visibility: 'visible' }
+              : { width: '2vw', visibility: 'collapse' }
+          }
+          disabled={activePage === totalPages}
           onClick={() => {
-            if (activePage !== totalPages) {
-              dispatch(setActivepage(activePage + 1));
-            }
+            dispatch(setActivepage(activePage + 1));
           }}
         >
           Next
-        </div>
+        </button>
       </div>
 
       <ProfileInfo />
