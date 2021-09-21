@@ -182,7 +182,7 @@ export const infoSlice = createSlice({
         totalPages,
         searchValue: action.payload,
         activePage: 1,
-        activeInfo: activeInfo,
+        activeInfo,
       };
     },
   },
