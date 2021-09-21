@@ -5,13 +5,16 @@
   cursor: pointer;
   position: relative;
   transition: all 0.3s;
-  box-sizing: border-box;
   width: 60vw;
   z-index: 2;
+  height: 4vh;
+  align-items: center;
+  box-sizing: border-box;
 
   &:first-of-type {
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+    border-bottom: 1px solid indigo;
   }
 
   &:last-of-type {
@@ -19,11 +22,12 @@
     border-bottom-right-radius: 15px;
   }
   & div {
-    padding: 0.5vh 1vw;
+    height: 100%;
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
     transition: all 0.5s;
 
     & ~ div {
@@ -45,13 +49,15 @@
 }
 .profile-table {
   font-weight: normal;
+  height: 2.9vh;
+
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.2);
     border-radius: 15px;
-    border: 3px solid indigo;
     position: relative;
     z-index: 5;
     box-shadow: 0px 0px 20px rgba(indigo, 0.5);
     background-color: lightskyblue;
+    border: 3px solid indigo;
   }
 }
