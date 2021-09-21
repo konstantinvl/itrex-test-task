@@ -205,12 +205,18 @@ export const infoSlice = createSlice({
         const activeInfo: PersonInt[] = action.payload.filter(
           (_item, id) => id >= 0 && id <= onPage - 1
         );
-        const states: string[] = ['None'];
+        const states: string[] = [];
         action.payload.forEach((profile) => {
           if (!states.includes(profile.adress.state)) {
             states.push(profile.adress.state);
           }
         });
+        states.sort((itemA, itemB) => {
+          if (itemA > itemB) {
+            return 1;
+          } else return -1;
+        });
+        states.unshift('None');
         return {
           ...state,
           info: action.payload,
