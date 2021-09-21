@@ -214,7 +214,8 @@ export const infoSlice = createSlice({
         states.sort((itemA, itemB) => {
           if (itemA > itemB) {
             return 1;
-          } else return -1;
+          }
+          return -1;
         });
         states.unshift('None');
         return {
