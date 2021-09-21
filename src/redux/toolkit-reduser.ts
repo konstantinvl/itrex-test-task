@@ -44,6 +44,8 @@ export const infoSlice = createSlice({
         case ID: {
           if (name === ID) {
             order = -order;
+          } else {
+            order = 1;
           }
           info.sort((profileA, profileB) => {
             if (profileA.id > profileB.id) {
@@ -59,6 +61,8 @@ export const infoSlice = createSlice({
         case FIRST_NAME: {
           if (name === FIRST_NAME) {
             order = -order;
+          } else {
+            order = 1;
           }
           info.sort((profileA, profileB) => {
             if (profileA.firstName > profileB.firstName) {
@@ -74,6 +78,8 @@ export const infoSlice = createSlice({
         case LAST_NAME: {
           if (name === LAST_NAME) {
             order = -order;
+          } else {
+            order = 1;
           }
           info.sort((profileA, profileB) => {
             if (profileA.lastName > profileB.lastName) {
@@ -89,6 +95,8 @@ export const infoSlice = createSlice({
         case EMAIL: {
           if (name === EMAIL) {
             order = -order;
+          } else {
+            order = 1;
           }
           info.sort((profileA, profileB) => {
             if (profileA.email > profileB.email) {
@@ -104,6 +112,8 @@ export const infoSlice = createSlice({
         case PHONE: {
           if (name === PHONE) {
             order = -order;
+          } else {
+            order = 1;
           }
           info.sort((profileA, profileB) => {
             if (profileA.phone > profileB.phone) {
@@ -119,6 +129,8 @@ export const infoSlice = createSlice({
         case STATE: {
           if (name === STATE) {
             order = -order;
+          } else {
+            order = 1;
           }
           info.sort((profileA, profileB) => {
             if (profileA.adress.state > profileB.adress.state) {
