@@ -12,17 +12,33 @@ export const ProfileInfo: FC = () => {
       style={activeDescription ? { visibility: 'visible' } : { visibility: 'collapse' }}
     >
       <h5>Profile Info:</h5>
-      <span>
-        Selected Profile:{' '}
-        {`${activeDescription?.firstName} ${activeDescription?.lastName}`}
-      </span>
-      <span>
-        Description: <span style={{ fontSize: '0.9em' }}>{lorem.generateWords(32)}</span>
-      </span>
-      <span>Address: {activeDescription?.adress.streetAddress}</span>
-      <span>City: {activeDescription?.adress.city}</span>
-      <span>State: {activeDescription?.adress.state}</span>
-      <span>Index: {activeDescription?.adress.zip}</span>
+      <div className="profile-info_wrapper">
+        <div className="profile-info_info">
+          <span>
+            <h6>Selected Profile:</h6>{' '}
+            {`${activeDescription?.firstName} ${activeDescription?.lastName}`}
+          </span>
+
+          <span>
+            <h6>Address:</h6> {activeDescription?.adress.streetAddress}
+          </span>
+          <span>
+            <h6>City:</h6> {activeDescription?.adress.city}
+          </span>
+          <span>
+            <h6>State:</h6> {activeDescription?.adress.state}
+          </span>
+          <span>
+            <h6>Index:</h6> {activeDescription?.adress.zip}
+          </span>
+        </div>
+        <div className="profile-info_description">
+          <span>
+            <h6>Description:</h6>{' '}
+            <span style={{ fontSize: '0.9em' }}>{lorem.generateWords(32)}</span>
+          </span>
+        </div>
+      </div>
     </div>
   );
 };

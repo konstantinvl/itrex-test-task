@@ -33,13 +33,14 @@ export function App(): JSX.Element {
           <input
             type="text"
             value={searchValue}
+            id="search"
             onChange={(e) => {
               dispatch(setSearchValue(e.target.value));
             }}
           />
         </div>
         <div>
-          <label htmlFor="state">Filter by state: </label>
+          <label htmlFor="state-select">Filter by state: </label>
           <select
             name="state"
             id="state-select"
@@ -73,8 +74,8 @@ export function App(): JSX.Element {
           className="page-selector"
           style={
             totalPages > 0
-              ? { width: '2vw', visibility: 'visible' }
-              : { width: '2vw', visibility: 'hidden' }
+              ? { width: '2.5vw', visibility: 'visible' }
+              : { width: '2.5vw', visibility: 'hidden' }
           }
           disabled={activePage === 1}
           onClick={() => {
@@ -88,8 +89,8 @@ export function App(): JSX.Element {
           className="page-selector"
           style={
             totalPages > 0
-              ? { width: '2vw', visibility: 'visible' }
-              : { width: '2vw', visibility: 'collapse' }
+              ? { width: '2.5vw', visibility: 'visible' }
+              : { width: '2.5vw', visibility: 'collapse' }
           }
           disabled={activePage === totalPages}
           onClick={() => {

@@ -1,15 +1,25 @@
 .page-selector {
-  width: 1.5vw;
-  height: 1.5vw;
-  border: 1px solid black;
+  width: 2vw;
+  height: 2vw;
+  border: none;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: all 0.5s;
   cursor: pointer;
+  background-color: rgba(white, 0.2);
+  box-sizing: border-box;
   &-active {
     @extend .page-selector;
+    border: 2px solid indigo;
     border-radius: 50%;
     text-decoration: underline;
+    box-shadow: 2px 5px 10px rgba(indigo, $alpha: 0.7);
+    font-weight: bolder;
+  }
+  &:disabled {
+    background-color: rgba($color: #a0a0a0, $alpha: 0.2);
+    color: rgba($color: #a0a0a0, $alpha: 0.5);
   }
 }

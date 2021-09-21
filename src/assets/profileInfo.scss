@@ -3,15 +3,48 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  margin-top: 5vh;
-  border: 1px solid black;
+  padding: 0.5vh;
+  max-height: 20vh;
+  width: 60vw;
+  margin-top: 2vh;
+  border: 2px solid indigo;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(lightskyblue, 0.1),
+    rgba($color: white, $alpha: 0.5)
+  );
+  box-shadow: 5px 15px 25px rgba(indigo, $alpha: 0.4);
   cursor: pointer;
-  & * {
-    font-size: 1.2em;
-    transition: all 0.5s;
+  border-radius: 20px;
+
+  &_wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
   }
-  & * ~ * {
-    margin-top: 0.5vh;
+  &_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 45%;
+    align-items: center;
+    & > * {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      width: 100%;
+
+      & h6 {
+        width: 45%;
+      }
+    }
+    & * ~ * {
+      border-top: 1px dotted indigo;
+      padding-top: 0.5vh;
+    }
+  }
+  &_description {
+    width: 30%;
   }
 }

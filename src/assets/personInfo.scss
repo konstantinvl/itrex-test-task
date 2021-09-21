@@ -1,13 +1,19 @@
 .personInfo {
+  font-weight: bold;
   display: flex;
   flex-direction: row;
   cursor: pointer;
-  border: 1px solid black;
-  transition: all 0.5s;
+  position: relative;
+  transition: all 0.3s;
+  box-sizing: border-box;
+  width: 60vw;
+  z-index: 2;
+
   &:first-of-type {
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
   }
+
   &:last-of-type {
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
@@ -19,11 +25,9 @@
     flex-wrap: wrap;
     justify-content: center;
     transition: all 0.5s;
-    &:hover {
-      text-shadow: 3px 2px 5px gray;
-    }
+
     & ~ div {
-      border-left: 1px solid black;
+      border-left: 1px solid indigo;
     }
   }
   &_id {
@@ -40,8 +44,14 @@
   }
 }
 .profile-table {
+  font-weight: normal;
   &:hover {
     transform: scale(1.1);
     border-radius: 15px;
+    border: 3px solid indigo;
+    position: relative;
+    z-index: 5;
+    box-shadow: 0px 0px 20px rgba(indigo, 0.5);
+    background-color: lightskyblue;
   }
 }
