@@ -4,7 +4,7 @@
   "description": "Empty project template",
   "private": true,
   "scripts": {
-    "build": "eslint src && webpack",
+    "build": "eslint src --fix && webpack",
     "dev": "webpack serve --env development --history-api-fallback",
     "lint": "eslint src",
     "fix": "eslint ./src --fix"
